@@ -23,15 +23,17 @@ Bluetooth keyboard to USB HID proxy for PS5 using Raspberry Pi Zero 2 W.
 
 Bluetooth Keyboard
         ↓
- Raspberry Pi Zero 2 W
+Raspberry Pi Zero 2 W
         ↓
- USB HID Gadget
+USB HID Gadget
         ↓
-       PS5
+PS5
 
-## Installation
+---
 
-### Clone repository
+# Installation
+
+## 1. Clone repository
 
 ```bash
 git clone https://github.com/Nothka/ps5-keyboard-proxy.git
