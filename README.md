@@ -34,5 +34,5 @@ Bluetooth Keyboard
 ### Clone repository
 
 ```bash
-git clone https://github.com/YOURNAME/ps5-keyboard-proxy.git
+git clone https://github.com/Nothka/ps5-keyboard-proxy.git
 cd ps5-keyboard-proxy
