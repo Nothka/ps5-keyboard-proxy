@@ -1,0 +1,11 @@
+[Unit]
+Description=Bluetooth Auto Connect
+After=bluetooth.target
+
+[Service]
+Type=simple
+ExecStart=/bin/bash -c 'sleep 10 && bluetoothctl connect D2:F5:9F:AD:15:8D'
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

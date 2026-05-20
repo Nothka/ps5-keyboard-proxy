@@ -1,0 +1,11 @@
+[Unit]
+Description=Bluetooth Keyboard Passthrough
+After=bluetooth.target
+
+[Service]
+ExecStart=/usr/bin/python3 /home/pi/kb_passthrough.py
+Restart=always
+User=root
+
+[Install]
+WantedBy=multi-user.target
