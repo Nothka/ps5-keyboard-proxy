@@ -1,0 +1,12 @@
+[Unit]
+Description=PS5 Keyboard Proxy Launcher
+After=network.target bluetooth.target
+
+[Service]
+Type=simple
+ExecStart=/home/pi/ps5kbd.sh
+Restart=always
+User=root
+
+[Install]
+WantedBy=multi-user.target
