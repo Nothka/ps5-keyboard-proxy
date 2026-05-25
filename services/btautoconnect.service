@@ -4,7 +4,7 @@ After=bluetooth.target
 
 [Service]
 Type=simple
-ExecStart=/bin/bash -c 'sleep 10 && bluetoothctl connect D2:F5:9F:AD:15:8D'
+ExecStart=/bin/bash -c 'sleep 10 && bluetoothctl connect YOUR_KEYBOARD_MAC
 Restart=on-failure
 
 [Install]
