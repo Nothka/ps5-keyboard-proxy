@@ -1,12 +1,12 @@
 [Unit]
-Description=PS5 Keyboard Proxy Launcher
-After=network.target bluetooth.target
+Description=PS5 USB HID Keyboard Gadget
+After=local-fs.target
+Before=kbpassthrough.service
 
 [Service]
-Type=simple
-ExecStart=/home/pi/ps5kbd.sh
-Restart=always
-User=root
+Type=oneshot
+ExecStart=/usr/local/bin/ps5kbd-gadget.sh
+RemainAfterExit=yes
 
 [Install]
 WantedBy=multi-user.target

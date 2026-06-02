@@ -1,19 +1,8 @@
 import time
 from evdev import InputDevice, ecodes, list_devices
 
-kbd = None
-
-for path in list_devices():
-    dev = InputDevice(path)
-    if "G915" in dev.name and "Keyboard" in dev.name:
-        kbd = dev
-        print("Using", dev.path, dev.name)
-        break
-
-if kbd is None:
-    raise Exception("Keyboard not found")
-
-hid = open("/dev/hidg0", "wb")
+KEYBOARD_NAME_HINTS = ["G915", "Keyboard"]
+HID_PATH = "/dev/hidg0"
 
 keymap = {
     ecodes.KEY_A: 0x04, ecodes.KEY_B: 0x05, ecodes.KEY_C: 0x06,
@@ -71,6 +60,46 @@ modmap = {
     ecodes.KEY_RIGHTMETA: 0x80,
 }
 
+def find_keyboard():
+    for path in list_devices():
+        dev = InputDevice(path)
+        name = dev.name or ""
+
+        if "G915" in name and "Keyboard" in name:
+            print(f"Using keyboard: {name} at {path}", flush=True)
+            return dev
+
+    return None
+
+def wait_for_keyboard():
+    while True:
+        dev = find_keyboard()
+        if dev is not None:
+            return dev
+
+        print("Keyboard not found, waiting...", flush=True)
+        time.sleep(1)
+
+def wait_for_hid():
+    while True:
+        try:
+            hid = open(HID_PATH, "wb")
+            print(f"Using HID gadget: {HID_PATH}", flush=True)
+            return hid
+        except FileNotFoundError:
+            print("/dev/hidg0 not found, waiting...", flush=True)
+            time.sleep(1)
+
+kbd = wait_for_keyboard()
+
+try:
+    kbd.grab()
+    print("Keyboard grabbed", flush=True)
+except Exception as e:
+    print(f"Could not grab keyboard: {e}", flush=True)
+
+hid = wait_for_hid()
+
 pressed = []
 mods = 0
 
@@ -96,11 +125,13 @@ for event in kbd.read_loop():
             mods |= modmap[code]
         elif value == 0:
             mods &= ~modmap[code]
+
         send_report()
         continue
 
     key = keymap.get(code)
-    if not key:
+
+    if key is None:
         continue
 
     if value == 1:
@@ -111,4 +142,3 @@ for event in kbd.read_loop():
             pressed.remove(key)
 
     send_report()
-    time.sleep(0.005)
